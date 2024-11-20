@@ -1,4 +1,4 @@
-# auto_render_with_bpy
+# auto-render-with-bpy
 
 使用blender-python 自动渲染模拟出的密封圈下落场景图片
 
