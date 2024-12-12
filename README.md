@@ -2,6 +2,9 @@
 
 使用blender-python 自动渲染模拟出的密封圈下落场景图片
 
+- [ ] 实现 UI 界面 用pyqt
+- [ ] 
+
 实例图片
 
 - 密集下落场景模拟文件：**fallRingsCircleSimulation.blend**
