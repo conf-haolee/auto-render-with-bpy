@@ -5,7 +5,7 @@
     auther: haolee
 """
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QPlainTextEdit
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QPlainTextEdit
 
 import sys, os
 # app = QApplication([])

@@ -6,24 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>652</width>
-    <height>581</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="start_render_btn">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>280</y>
+     <x>250</x>
+     <y>220</y>
      <width>75</width>
      <height>24</height>
     </rect>
    </property>
    <property name="text">
-    <string>开始</string>
+    <string>开始渲染</string>
    </property>
   </widget>
  </widget>
