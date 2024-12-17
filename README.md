@@ -36,8 +36,7 @@
 `blender 4.1`
 `bpy-4.1.0-cp311-cp311-win_amd64.whl`
 
-`pip install pyqt6`
-
+ui界面需要的环境：`pip install pyqt6`
 `pip install pyqt6-tools`
 
 官方软件下载
