@@ -1,0 +1,8 @@
+
+mvtec-halcon==20111
+numpy==2.1.1
+Python== 3.11.9 
+bpy==4.1.0
+opencv-python==4.10.0.84
+pandas==2.2.3
+PySide6==6.8.1
