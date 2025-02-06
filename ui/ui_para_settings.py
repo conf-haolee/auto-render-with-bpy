@@ -10,7 +10,8 @@ from PySide6.QtWidgets import QApplication, QMessageBox, QMainWindow,QFileDialog
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import QFile, QIODevice, Qt
+from PySide6.QtCore import QFile, QIODevice, Qt, QSettings
+sys.path.append("D:/02 study/cvhao_github/auto-render-with-bpy")
 from blender_scene import BlenderScene
 from detect_real_ring import RealRingDetector
 
@@ -18,9 +19,9 @@ class ParaSettings(QMainWindow):
     def __init__(self):
         super(ParaSettings, self).__init__()
         # use uifile absolute path 
-        current_dir = os.getcwd()
+        self._current_dir = os.getcwd()
         ui_file_name = 'ui/para_settings.ui'
-        absolute_path = os.path.join(current_dir, ui_file_name)
+        absolute_path = os.path.join(self._current_dir, ui_file_name)
         
         ui_file = QFile(absolute_path)
         if not ui_file.open(QIODevice.ReadOnly):
@@ -34,10 +35,11 @@ class ParaSettings(QMainWindow):
             sys.exit(-1)
         # 设置ui界面标题和图标
         self.ui.setWindowTitle("密封圈视觉计数")
-        icon_path = os.path.join(current_dir, 'ui/pic/ringVisionCount_logo3.png')
+        icon_path = os.path.join(self._current_dir, 'ui/pic/ringVisionCount_logo3.png')
         self.ui.setWindowIcon(QIcon(icon_path))
+        
         # # 创建并显示 SplashScreen
-        # splash_path = os.path.join(current_dir, 'ui/pic/ringVisionCount_logo1.jpg')
+        # splash_path = os.path.join(self._current_dir, 'ui/pic/ringVisionCount_logo1.jpg')
         # splash = QSplashScreen(QPixmap(splash_path), Qt.WindowStaysOnTopHint)
         # splash.show()
         # # 模拟程序加载过程
@@ -50,10 +52,12 @@ class ParaSettings(QMainWindow):
 
         # Connect the button click signal to the slot
         self.ui.start_render_btn.clicked.connect(self.handleCalc)
-
         self.ui.choose_save_image_path_btn.clicked.connect(self.handleChooseSaveImagePath)
         self.ui.load_image_path_btn.clicked.connect(self.handleLoadImagePath)
-
+        self.ui.save_settings_btn.clicked.connect(self.handleSaveSettings)
+        
+        # **程序启动时，自动加载已保存的参数**
+        self.load_settings()
     # slot function: start render
     def handleCalc(self):
         print("Start Render!")
@@ -70,6 +74,11 @@ class ParaSettings(QMainWindow):
             outer_radius, inner_radius = self._real_ring.detect()
             print("Average Max Radius:", outer_radius)
             print("Average Min Radius:", inner_radius)
+
+            # 将计算出的外径和内径赋值给方正场景中
+            self._ring_scene.outer_radius = outer_radius
+            self._ring_scene.inner_radius = inner_radius
+            # 更新UI界面的外径和内径
             self.ui.outer_circle_radius_dspinbox.setValue(outer_radius)
             self.ui.inner_circle_radius_dspinbox.setValue(inner_radius)
         
@@ -83,8 +92,34 @@ class ParaSettings(QMainWindow):
 
             # self.label.setText(f"已选择: {folder_path}")
             # self.load_images(folder_path)
+    # slot function: save settings
+    def handleSaveSettings(self):
+        print("Save Settings!")
+        self.save_settings()
 
+    def save_settings(self):
+        # 定义文件路径和文件名称
+        file_name = 'config/para_settings.ini'
+        file_path = os.path.join(self._current_dir, file_name) # 或者指定完整路径，例如 "C:/path/to/settings.ini"
 
+        # 使用 QSettings 保存数据到 INI 文件
+        settings = QSettings(file_path, QSettings.IniFormat)
+        settings.setValue("real_image_path", self.ui.load_image_path_line.text())
+        settings.setValue("outer_circle_radius", self.ui.outer_circle_radius_dspinbox.value())
+        settings.setValue("inner_circle_radius", self.ui.inner_circle_radius_dspinbox.value())
+        settings.setValue("save_image_path", self.ui.image_path_line.text())
+
+    def load_settings(self):
+        # 定义文件路径和文件名称
+        file_name = 'config/para_settings.ini'
+        file_path = os.path.join(self._current_dir, file_name) # 或者指定完整路径，例如 "C:/path/to/settings.ini"
+
+        # 使用 QSettings 从 INI 文件加载数据
+        settings = QSettings(file_path, QSettings.IniFormat)
+        self.ui.load_image_path_line.setText(settings.value("real_image_path", ""))
+        self.ui.outer_circle_radius_dspinbox.setValue(settings.value("outer_circle_radius", 0.0, type= float))
+        self.ui.inner_circle_radius_dspinbox.setValue(settings.value("inner_circle_radius", 0.0 ,type=float))
+        self.ui.image_path_line.setText(settings.value("save_image_path", ""))
 
 # if __name__ == "__main__":
 #     app = QApplication([])

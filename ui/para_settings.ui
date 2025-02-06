@@ -459,9 +459,9 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="save_settings_btn">
            <property name="text">
-            <string>PushButton</string>
+            <string>保存参数</string>
            </property>
           </widget>
          </item>
