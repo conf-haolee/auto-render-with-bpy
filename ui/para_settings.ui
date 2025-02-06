@@ -40,7 +40,7 @@
        <widget class="QWidget" name="widget_up_right" native="true">
         <property name="maximumSize">
          <size>
-          <width>300</width>
+          <width>360</width>
           <height>16777215</height>
          </size>
         </property>
@@ -50,7 +50,7 @@
            <item>
             <widget class="QLabel" name="select_object_label">
              <property name="text">
-              <string>选择物体</string>
+              <string>选择物体类型</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -59,14 +59,60 @@
            </item>
            <item>
             <widget class="QComboBox" name="secect_object_comboBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="editable">
+              <bool>false</bool>
+             </property>
              <item>
               <property name="text">
-               <string>21mm-绿色圆环</string>
+               <string>环体</string>
               </property>
              </item>
             </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_25">
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>历史图片位置</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="load_image_path_line"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="load_image_path_btn">
+             <property name="text">
+              <string>加载</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>59</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox">
@@ -83,12 +129,16 @@
                   <item>
                    <widget class="QLabel" name="major_radius_label">
                     <property name="text">
-                     <string>环体内圆半径</string>
+                     <string>环体外圆半径</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QDoubleSpinBox" name="major_radius_dspinbox"/>
+                   <widget class="QDoubleSpinBox" name="outer_circle_radius_dspinbox">
+                    <property name="maximum">
+                     <double>99999.000000000000000</double>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -97,12 +147,16 @@
                   <item>
                    <widget class="QLabel" name="minor_radius_label">
                     <property name="text">
-                     <string>环体环半径</string>
+                     <string>环体内圆半径</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QDoubleSpinBox" name="minor_radius_dspinbox"/>
+                   <widget class="QDoubleSpinBox" name="inner_circle_radius_dspinbox">
+                    <property name="maximum">
+                     <double>99999.000000000000000</double>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -185,7 +239,7 @@
             <item>
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>TextLabel</string>
+               <string>摄像机缩放</string>
               </property>
              </widget>
             </item>
@@ -208,7 +262,7 @@
               <item>
                <widget class="QLabel" name="label_16">
                 <property name="text">
-                 <string>摄像机焦距</string>
+                 <string>摄像机位置</string>
                 </property>
                </widget>
               </item>
@@ -240,7 +294,17 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QSpinBox" name="resolution_x_spinbox"/>
+                   <widget class="QSpinBox" name="resolution_x_spinbox">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
+                    <property name="value">
+                     <number>512</number>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -254,7 +318,17 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QSpinBox" name="resolution_y_spinbox"/>
+                   <widget class="QSpinBox" name="resolution_y_spinbox">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
+                    <property name="value">
+                     <number>512</number>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -273,6 +347,9 @@
                   </item>
                   <item>
                    <widget class="QComboBox" name="image_format_combobox">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <item>
                      <property name="text">
                       <string>BMP</string>
@@ -293,6 +370,9 @@
                   </item>
                   <item>
                    <widget class="QComboBox" name="comboBox_2">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <item>
                      <property name="text">
                       <string>BMP</string>
@@ -328,10 +408,10 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit"/>
+                 <widget class="QLineEdit" name="image_path_line"/>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="choose_save_image_path_btn">
                   <property name="text">
                    <string>选择</string>
                   </property>
@@ -355,23 +435,45 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>120</height>
+       <height>240</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="start_render_btn">
-          <property name="text">
-           <string>Start Render</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QPlainTextEdit" name="log_plaintext">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="widget_2" native="true">
+        <property name="maximumSize">
+         <size>
+          <width>360</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="start_render_btn">
+           <property name="text">
+            <string>Start Render</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </widget>

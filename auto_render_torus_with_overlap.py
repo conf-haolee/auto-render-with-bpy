@@ -12,8 +12,8 @@ import random
 '''
     参数设置列表
 '''
-max_torus_num = 5                       # 创建的环体数量
-render_pic_num = 10000                # 渲染的图片数量
+max_torus_num = 2                       # 创建的环体数量
+render_pic_num = 10                # 渲染的图片数量
 max_deform = 60                     # 设置最大形变值
 
 for torus_num_i in range(1,(max_torus_num-1)):
@@ -115,5 +115,6 @@ for torus_num_i in range(1,(max_torus_num-1)):
         scene.camera = bpy.data.objects['camera']                       # 设置相机
         bpy.ops.render.render()                                         # 开始渲染图片
         currentTime = datetime.now().strftime("%Y%m%d %H%M")
-        save_bmp = "E:/workspace/haolee/blender_bmp/03 render_bmp/circle_" + str(torus_num_i) + "/"  + currentTime + "_" + str(renderTimes) + ".bmp"
+        # save_bmp = "E:/workspace/haolee/blender_bmp/03 render_bmp/circle_" + str(torus_num_i) + "/"  + currentTime + "_" + str(renderTimes) + ".bmp"
+        save_bmp = "D:/workspace/circle_" + str(torus_num_i) + "/"  + currentTime + "_" + str(renderTimes) + ".bmp"
         bpy.data.images["Render Result"].save_render(save_bmp)          # 保存渲染图片
