@@ -7,6 +7,7 @@ sigma = 15  # 标准差
 
 # 生成正态分布随机数
 samples_normal = np.random.normal(mu, sigma, 10000)
+print(samples_normal)
 
 # 绘制正态分布的概率密度函数图形
 x_normal = np.linspace(0, 100, 500)  # x轴范围

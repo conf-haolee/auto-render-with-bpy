@@ -6,14 +6,16 @@
 import sys
 import os
 import time
+
 from PySide6.QtWidgets import QApplication, QMessageBox, QMainWindow,QFileDialog, QSplashScreen
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QFile, QIODevice, Qt, QSettings
-sys.path.append("D:/02 study/cvhao_github/auto-render-with-bpy")
+# sys.path.append("D:/02 study/cvhao_github/auto-render-with-bpy")
 from blender_scene import BlenderScene
 from detect_real_ring import RealRingDetector
+from render_pic_standardization import RenderPicStandardization
 
 class ParaSettings(QMainWindow):
     def __init__(self):
@@ -49,6 +51,8 @@ class ParaSettings(QMainWindow):
         self._ring_scene = BlenderScene(2, 1, 0)  
         # 创建真实密封圈检测对象
         self._real_ring = RealRingDetector()
+        # 创建图片标准化对象
+        self._pic_standardization = RenderPicStandardization(" ")
 
         # Connect the button click signal to the slot
         self.ui.start_render_btn.clicked.connect(self.handleCalc)
@@ -71,6 +75,9 @@ class ParaSettings(QMainWindow):
             self.save_settings()  # 先保存参数
             self.handleSaveSettings()
             self._ring_scene.blender_render()
+            self._pic_standardization.render_pic_path = self.ui.image_path_line.text()
+            self._pic_standardization.standardize()
+            
         elif reply == QMessageBox.No:
             self._ring_scene.blender_render()  # 直接运行，不保存
         else:
@@ -153,4 +160,3 @@ class ParaSettings(QMainWindow):
         self.ui.render_pic_num_spinbox.setValue(settings.value("render_pic_num_spinbox", 0, type=int))
         self.ui.image_path_line.setText(settings.value("save_image_path", ""))
 
-    

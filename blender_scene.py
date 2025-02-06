@@ -2,6 +2,7 @@ import bpy
 from datetime import datetime
 import math
 import random
+import numpy as np
 
 class BlenderScene:
 
@@ -144,9 +145,13 @@ class BlenderScene:
                     select_torus[torus_index].location[0] = 0
                     select_torus[torus_index].location[1] = rand_y
                     select_torus[torus_index].location[2] = rand_z
-                    # 模拟随机形变  TODO： 随机形变改成高斯概率 形变
-                    rand_deform = random.randint((-1 * self._max_deform),self._max_deform)                            # 生成随机形变值
-                    select_torus[torus_index].modifiers[0].angle = math.radians(rand_deform)
+                    # 模拟随机形变  check： 随机形变改成高斯概率 形变
+                    mu = 0  # 均值
+                    sigma = self._max_deform / 3  # 标准差 3 sigma 概率分布达到 0.9974
+                    # 生成正态分布随机数
+                    normal_distribution = np.random.normal(mu, sigma, 1)
+                    # rand_deform = random.randint((-1 * self._max_deform),self._max_deform)                  # 生成随机形变值
+                    select_torus[torus_index].modifiers[0].angle = math.radians(normal_distribution[0])     # 应用形变
                     # 模拟随机旋转
                     rand_rotation_x = random.randint(0,360)                         # 生成随机旋转值 X
                     rand_rotation_y = random.randint(0,360)                         # 生成随机旋转值 Y
