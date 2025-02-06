@@ -174,7 +174,11 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QDoubleSpinBox" name="metallicity_dspinbox"/>
+                   <widget class="QDoubleSpinBox" name="metallicity_dspinbox">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -188,7 +192,11 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QSpinBox" name="torus_num_spinbox"/>
+                   <widget class="QSpinBox" name="max_torus_num_spinbox">
+                    <property name="maximum">
+                     <number>6</number>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -253,7 +261,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -267,7 +279,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_7"/>
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -394,7 +410,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="image_num_spinbox"/>
+                 <widget class="QSpinBox" name="render_pic_num_spinbox">
+                  <property name="maximum">
+                   <number>999999</number>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>

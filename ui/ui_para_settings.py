@@ -55,14 +55,27 @@ class ParaSettings(QMainWindow):
         self.ui.choose_save_image_path_btn.clicked.connect(self.handleChooseSaveImagePath)
         self.ui.load_image_path_btn.clicked.connect(self.handleLoadImagePath)
         self.ui.save_settings_btn.clicked.connect(self.handleSaveSettings)
-        
+
         # **程序启动时，自动加载已保存的参数**
         self.load_settings()
     # slot function: start render
     def handleCalc(self):
         print("Start Render!")
-        print(self._ring_scene.save_image_folder_path)
-        self._ring_scene.blender_render()
+        reply = QMessageBox.question(
+            self,
+            "确认操作",
+            "是否保存当前参数？",
+            QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
+        )
+        if reply == QMessageBox.Yes:
+            self.save_settings()  # 先保存参数
+            self.handleSaveSettings()
+            self._ring_scene.blender_render()
+        elif reply == QMessageBox.No:
+            self._ring_scene.blender_render()  # 直接运行，不保存
+        else:
+            print("运行取消")  # 取消操作
+
     # slot function: load real image path
     def handleLoadImagePath(self):
         print("Load Image Path!")
@@ -95,6 +108,17 @@ class ParaSettings(QMainWindow):
     # slot function: save settings
     def handleSaveSettings(self):
         print("Save Settings!")
+        # 设置 圆环的外径和内径
+        self._ring_scene.outer_radius = self.ui.outer_circle_radius_dspinbox.value()
+        self._ring_scene.inner_radius = self.ui.inner_circle_radius_dspinbox.value()
+
+        # 设置 最大环体数量，渲染图片数量
+        self._ring_scene.max_torus_num = self.ui.max_torus_num_spinbox.value()
+        self._ring_scene.render_pic_num = self.ui.render_pic_num_spinbox.value()
+        # 设置最大形变值
+        self._ring_scene.max_deform = self.ui.max_deform_spinbox.value()
+        # 设置渲染时 保存图片的文件夹路径
+        self._ring_scene.save_image_folder_path = self.ui.image_path_line.text()
         self.save_settings()
 
     def save_settings(self):
@@ -107,6 +131,10 @@ class ParaSettings(QMainWindow):
         settings.setValue("real_image_path", self.ui.load_image_path_line.text())
         settings.setValue("outer_circle_radius", self.ui.outer_circle_radius_dspinbox.value())
         settings.setValue("inner_circle_radius", self.ui.inner_circle_radius_dspinbox.value())
+
+        settings.setValue("max_torus_num_spinbox", self.ui.max_torus_num_spinbox.value())
+        settings.setValue("max_deform_spinbox", self.ui.max_deform_spinbox.value()) 
+        settings.setValue("render_pic_num_spinbox", self.ui.render_pic_num_spinbox.value()) 
         settings.setValue("save_image_path", self.ui.image_path_line.text())
 
     def load_settings(self):
@@ -119,12 +147,10 @@ class ParaSettings(QMainWindow):
         self.ui.load_image_path_line.setText(settings.value("real_image_path", ""))
         self.ui.outer_circle_radius_dspinbox.setValue(settings.value("outer_circle_radius", 0.0, type= float))
         self.ui.inner_circle_radius_dspinbox.setValue(settings.value("inner_circle_radius", 0.0 ,type=float))
-        self.ui.image_path_line.setText(settings.value("save_image_path", ""))
 
-# if __name__ == "__main__":
-#     app = QApplication([])
-#     para_settings = ParaSettings()
-#     para_settings.ui.show()
-#     app.exec()
+        self.ui.max_torus_num_spinbox.setValue(settings.value("max_torus_num_spinbox", 0, type=int))
+        self.ui.max_deform_spinbox.setValue(settings.value("max_deform_spinbox", 0, type=int))
+        self.ui.render_pic_num_spinbox.setValue(settings.value("render_pic_num_spinbox", 0, type=int))
+        self.ui.image_path_line.setText(settings.value("save_image_path", ""))
 
     
