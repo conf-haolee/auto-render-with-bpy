@@ -4,6 +4,7 @@ import math
 import random
 import numpy as np
 
+
 class BlenderScene:
 
     def __init__(self, max_torus_num = 2, render_pic_num = 2, max_deform = 10, outer_radius = 0, inner_radius = 0, save_image_folder_path = ""):
@@ -137,14 +138,38 @@ class BlenderScene:
             scene.render.image_settings.color_mode = 'BW'       # 输入：黑白图片渲染
 
             for renderTimes in range(1,self._render_pic_num + 1):
+                # 设置相机视野范围
+                xlim = (-1, 1)
+                ylim = (5, 7)                  # blender中测量出的相机视野范围
+                radius = (calc_major_radius + calc_minor_radius) * 2 / 3 #/ 2 # 计算圆环的外圆半径
+                # 确保第一个圆心不会靠近边界，以便第二个圆仍在范围内
+                x1_min, x1_max = xlim[0] + radius, xlim[1] - radius
+                y1_min, y1_max = ylim[0] + radius, ylim[1] - radius
+                dist = radius
+                x1 = np.random.uniform(x1_min, x1_max)
+                y1 = np.random.uniform(y1_min, y1_max)
+                x0 = x1
+                y0 = y1     # 表示圆心坐标
                 for torus_index in range(0,torus_num_i):  
                     rand_move_x = 0
                     # 模拟随机位置 在整个相机视野 生成随机位置 
-                    rand_y = random.randint(-100,100) / 100                 
-                    rand_z = random.randint(500,700) / 100
+                    # rand_y = random.randint(-100,100) / 100                 
+                    # rand_z = random.randint(500,700) / 100
+                    # select_torus[torus_index].location[0] = 0
+                    # select_torus[torus_index].location[1] = rand_y
+                    # select_torus[torus_index].location[2] = rand_z
                     select_torus[torus_index].location[0] = 0
-                    select_torus[torus_index].location[1] = rand_y
-                    select_torus[torus_index].location[2] = rand_z
+                    select_torus[torus_index].location[1] = x1
+                    select_torus[torus_index].location[2] = y1
+                    print("第", torus_index,"个圆环中心：" "(", x1, ", ", y1, ")")
+                    x2, y2 = self.generate_next_ring_positions(radius, dist, x0, y0, (x1_min,x1_max), (y1_min,y1_max)) 
+                    # 更新圆半径与圆心坐标 为下次迭代准备
+                    dist = math.sqrt((x2 - x0) ** 2 + (y2 - y0) ** 2)  / 2
+                    x0 = (x1 + x2) / 2 
+                    y0 = (y1 + y2) / 2
+                    x1 = x2
+                    y1 = y2
+
                     # 模拟随机形变  check： 随机形变改成高斯概率 形变
                     mu = 0  # 均值
                     sigma = self._max_deform / 3  # 标准差 3 sigma 概率分布达到 0.9974
@@ -169,4 +194,30 @@ class BlenderScene:
                 bpy.data.images["Render Result"].save_render(save_bmp)              # 保存渲染图片
         
 
-    
+    def generate_next_ring_positions(self, radius, dist, x1, y1, x_minmax, y_minmax):
+        """
+        随机生成两个相交或相切的圆的圆心坐标
+        :param radius: 圆的半径
+        :param xlim: x 轴的取值范围
+        :param ylim: y 轴的取值范围
+        :return: (x2, y2) 两个圆心坐标
+        """
+        while True:
+            # 生成圆心距离 d，确保 0 < d ≤ 2r
+            # d = np.random.uniform(0, (radius + dist))  
+            # 改成指数概率分布，圆心距离越远概率越大
+            exp_samples = np.random.exponential(scale = 2, size = 10)  # 生成指数分布数据
+            exp_samples = exp_samples / 50  # 归一化到 (0, 1)
+            d = (1 - exp_samples[9] ) * (radius + dist)
+
+            print("最大距离：",(radius + dist),"生成圆心距离：", d)
+            # 生成随机角度 θ
+            theta = np.random.uniform(0, 2 * np.pi)
+
+            # 计算第二个圆心坐标
+            x2 = x1 + d * np.cos(theta)
+            y2 = y1 + d * np.sin(theta)
+
+            # 确保第二个圆心仍然在范围内
+            if (x_minmax[0] <= x2 <= x_minmax[1]) and (y_minmax[0] <= y2 <= y_minmax[1]):
+                return (x2, y2)    

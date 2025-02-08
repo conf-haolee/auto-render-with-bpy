@@ -76,8 +76,8 @@ class ParaSettings(QMainWindow):
             self.handleSaveSettings()
             self._ring_scene.blender_render()
             self._pic_standardization.render_pic_path = self.ui.image_path_line.text()
-            self._pic_standardization.standardize()
-            
+            # self._pic_standardization.standardize()
+
         elif reply == QMessageBox.No:
             self._ring_scene.blender_render()  # 直接运行，不保存
         else:

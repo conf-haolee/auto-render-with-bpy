@@ -1,5 +1,6 @@
 import os
 import cv2
+import numpy as np
 
 class RenderPicStandardization:
     def __init__(self, render_pic_path):
@@ -59,3 +60,27 @@ class RenderPicStandardization:
         self.torus_position_normalization()
 
         # return self.render_pic
+
+# def generate_circle_positions(radius, x1, y1, xlim = (-1,1), ylim = (5,7)):
+#     """
+#     随机生成两个相交或相切的圆的圆心坐标
+#     :param radius: 圆的半径
+#     :param xlim: x 轴的取值范围
+#     :param ylim: y 轴的取值范围
+#     :return: (x2, y2) 两个圆心坐标
+#     """
+#     while True:
+#         # 生成圆心距离 d，确保 0 < d ≤ 2r
+#         d = np.random.uniform(0.1, 2 * radius)  
+
+#         # 生成随机角度 θ
+#         theta = np.random.uniform(0, 2 * np.pi)
+
+#         # 计算第二个圆心坐标
+#         x2 = x1 + d * np.cos(theta)
+#         y2 = y1 + d * np.sin(theta)
+
+#         # 确保第二个圆心仍然在范围内
+#         if (xlim[0] + radius <= x2 <= xlim[1] - radius) and (ylim[0] + radius <= y2 <= ylim[1] - radius):
+#             return (x1, y1), (x2, y2)
+        
